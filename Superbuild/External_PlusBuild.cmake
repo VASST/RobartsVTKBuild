@@ -17,9 +17,8 @@ ELSE()
     SOURCE_DIR "${PLUS_SRC_DIR}"
     BINARY_DIR "${PLUS_BIN_DIR}"
     #--Download step--------------
-    SVN_USERNAME ${PLUS_ASSEMBLA_USERNAME}
-    SVN_PASSWORD ${PLUS_ASSEMBLA_PASSWORD}
-    SVN_REPOSITORY https://subversion.assembla.com/svn/plus/trunk/PlusBuild
+    GIT_REPOSITORY https://github.com/PlusToolkit/PlusBuild.git
+    GIT_TAG "master"
     #--Configure step-------------
     CMAKE_ARGS 
       ${ep_common_args}
@@ -29,8 +28,8 @@ ELSE()
       -DBUILD_TESTING:BOOL=OFF
       -DPLUSBUILD_DOWNLOAD_PlusDATA:BOOL=OFF 
       -DBUILD_SHARED_LIBS:BOOL=ON
-      -DPLUSBUILD_BUILD_PLUSAPP:BOOL=${RobartsVTK_BUILD_APPS}
-      -DPLUSBUILD_VTK_RENDERING_BACKEND:STRING=OpenGL2
+      -DPLUSBUILD_BUILD_PLUSAPP:BOOL=OFF
+      -DPLUSBUILD_BUILD_PLUSLIB_WIDGETS:BOOL=${RobartsVTK_BUILD_APPS}
       -DQt5_DIR:PATH=${Qt5_DIR}
       -DCMAKE_CXX_FLAGS:STRING=${ep_common_cxx_flags}
       -DCMAKE_C_FLAGS:STRING=${ep_common_c_flags}    

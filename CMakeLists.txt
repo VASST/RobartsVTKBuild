@@ -85,43 +85,6 @@ SET(Plus_DEPENDENCIES)
 INCLUDE(ExternalProject)
 
 #-----------------------------------------------------------------------------
-# SVN - Let's check if a valid version of SVN is available
-#-----------------------------------------------------------------------------
-# Need subversion for the automatic update of the repository
-MARK_AS_ADVANCED(CLEAR Subversion_SVN_EXECUTABLE)
-FIND_FILE(Subversion_SVN_EXECUTABLE svn${CMAKE_EXECUTABLE_SUFFIX} 
-  PATHS 
-  "c:/Program Files/TortoiseSVN/bin/"
-  "c:/Program Files/SlikSvn/bin/"
-  )
-FIND_PACKAGE(Subversion REQUIRED)
-
-#-----------------------------------------------------------------------------
-# ASSEMBLA - Set username and password for checking out Plus 
-# Anonymous user name for Plus assembla server: https://subversion.assembla.com/svn/plus/
-#-----------------------------------------------------------------------------
-SET(PLUS_ASSEMBLA_USERNAME "perklab_anonymous" )
-SET(PLUS_ASSEMBLA_PASSWORD "anonymous" )
-
-#-----------------------------------------------------------------------------
-# GIT - Let's check if a valid version of GIT is available
-#-----------------------------------------------------------------------------
-SET(GIT_PROTOCOL "git")
-
-IF( NOT GIT_EXECUTABLE)
-  MARK_AS_ADVANCED(CLEAR GIT_EXECUTABLE)
-  FIND_FILE(GIT_EXECUTABLE git${CMAKE_EXECUTABLE_SUFFIX} 
-    PATHS 
-      "c:/Program Files/Git/bin/"
-      "c:/Program Files (x86)/Git/bin/"
-    )
-  FIND_PACKAGE(Git)
-  IF(NOT GIT_FOUND)
-    MESSAGE(FATAL_ERROR "ERROR: Install Git and try to re-configure")
-  ENDIF()
-ENDIF()
-
-#-----------------------------------------------------------------------------
 # Qt comes first so we know which version to pass to VTK
 #-----------------------------------------------------------------------------
 IF(RobartsVTK_USE_QT)
