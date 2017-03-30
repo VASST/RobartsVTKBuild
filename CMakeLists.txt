@@ -83,6 +83,7 @@ ENDIF()
 #-----------------------------------------------------------------------------
 SET(Plus_DEPENDENCIES)
 INCLUDE(ExternalProject)
+SET(GIT_PROTOCOL git)
 
 #-----------------------------------------------------------------------------
 # Qt comes first so we know which version to pass to VTK
