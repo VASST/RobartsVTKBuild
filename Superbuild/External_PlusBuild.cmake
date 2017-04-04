@@ -10,6 +10,11 @@ IF(PlusLib_DIR OR PlusApp_DIR)
 ELSE()
   MESSAGE(STATUS "Downloading and building Plus from: https://subversion.assembla.com/svn/plus/trunk/PlusBuild")
 
+  SET(Plus_Additional_Args)
+  IF(RobartsVTK_BUILD_APPS)
+    LIST(APPEND Plus_Additional_Args -DPLUSBUILD_BUILD_PLUSLIB_WIDGETS:BOOL=ON)
+  ENDIF()
+
   SET (PLUS_SRC_DIR ${ep_dependency_DIR}/Plus CACHE INTERNAL "Path to store PlusBuild contents.")
   SET (PLUS_BIN_DIR ${ep_dependency_DIR}/Plus-bin CACHE INTERNAL "Path to store PlusBuild contents.")
   ExternalProject_Add(Plus
@@ -29,7 +34,6 @@ ELSE()
       -DPLUSBUILD_DOWNLOAD_PlusDATA:BOOL=OFF 
       -DBUILD_SHARED_LIBS:BOOL=ON
       -DPLUSBUILD_BUILD_PLUSAPP:BOOL=OFF
-      -DPLUSBUILD_BUILD_PLUSLIB_WIDGETS:BOOL=${RobartsVTK_BUILD_APPS}
       -DQt5_DIR:PATH=${Qt5_DIR}
       -DCMAKE_CXX_FLAGS:STRING=${ep_common_cxx_flags}
       -DCMAKE_C_FLAGS:STRING=${ep_common_c_flags}    
