@@ -58,7 +58,6 @@ OPTION(PLUS_USE_OPTITRACK "Provide support for the OptiTrack tracking system" OF
 OPTION(PLUS_USE_OPTIMET_CONOPROBE "Provide support for the Optimet ConoProbe" OFF)
 OPTION(PLUS_USE_NDI "Provide support for the NDI POLARIS and AURORA" ${RobartsVTK_BUILD_APPS})
 OPTION(PLUS_USE_NDI_CERTUS "Provide support for the NDI Certus" OFF)
-OPTION(PLUS_USE_POLARIS "Provide support for the NDI POLARIS and AURORA" OFF)
 OPTION(PLUS_USE_MICRONTRACKER "Provide support for the Claron MicronTracker" OFF)
 OPTION(PLUS_USE_INTELREALSENSE "Provide support for Intel RealSense cameras" OFF)
 OPTION(PLUS_USE_BRACHY_TRACKER "Provide support for the Brachy Steppers" OFF)
