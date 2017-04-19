@@ -11,22 +11,24 @@ Using a [git](https://en.wikipedia.org/wiki/Git_(software)) client, clone the re
 
 ### Known Configurations
 RobartsVTK has been built on the following configurations:
-* Windows 10 x64, Visual Studio 2012, 32/64bit builds
+* Windows 10 x64, Visual Studio 2013 & 2015, 32/64bit builds
 * Ubuntu 15.10, Unix Makefiles/Eclipse CDT (see [Ubuntu build tips](ubuntu.md))
 * Ubuntu 15.04, Unix Makefiles/Eclipse CDT
 
+### Tools
+* Visual Studio [2013](https://www.visualstudio.com/en-us/news/releasenotes/vs2013-community-vs)/[2015](https://www.visualstudio.com/downloads/)
+
 ### Dependencies
 The superbuild will download and build needed dependencies. Only two items must be installed and one built:
-* [CMake 3.4](https://cmake.org/download/)
-* [CUDA 7](https://developer.nvidia.com/cuda-downloads) (optional)
-* [Qt](http://download.qt.io/archive/qt/) - built (optional, please follow Qt build instructions)
+* [CMake 3.7+](https://cmake.org/download/)
+* [CUDA](https://developer.nvidia.com/cuda-downloads) (optional)
+* [Qt](https://www.qt.io/download-open-source/?hsCtaTracking=f977210e-de67-475f-a32b-65cec207fd03%7Cd62710cd-e1db-46aa-8d4d-2f1c1ffdacea#section-2/) - installed (optional)
 
 ### CMake Configuration
 The following variables should be set when configuring RobartsVTK
 * ITK_DIR:PATH = `<path/to/your/itk-bin/dir>` (optional, if built elsewhere)
 * PlusLib_DIR:PATH = `<path/to/your/plus-bin/dir>` (optional, if built elsewhere)
-* QT4 - QT_QMAKE_EXECUTABLE:FILEPATH = `<path/to/your/qt-buildOrInstall>/bin/qmake.exe`
-* QT5 - as above OR - Qt5_DIR:PATH = `<path/to/your/qt-buildOrInstall>/lib/cmake/Qt5`
+* QT5 - as above OR - Qt5_DIR:PATH = `<path/to/your/qtInstall>/lib/cmake/Qt5`
 * VTK_DIR:PATH = `<path/to/your/vtk-bin/dir>` (optional, if built elsewhere)
 
 ## License
