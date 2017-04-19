@@ -17,10 +17,10 @@ RobartsVTK has been built on the following configurations:
 
 ### Tools
 * Visual Studio [2013](https://www.visualstudio.com/en-us/news/releasenotes/vs2013-community-vs)/[2015](https://www.visualstudio.com/downloads/)
-
-### Dependencies
-The superbuild will download and build needed dependencies. Only two items must be installed and one built:
 * [CMake 3.7+](https://cmake.org/download/)
+
+### Optionals
+The superbuild will download and build needed dependencies. The following optional packages add more features
 * [CUDA](https://developer.nvidia.com/cuda-downloads) (optional)
 * [Qt](https://www.qt.io/download-open-source/?hsCtaTracking=f977210e-de67-475f-a32b-65cec207fd03%7Cd62710cd-e1db-46aa-8d4d-2f1c1ffdacea#section-2/) - installed (optional)
 
