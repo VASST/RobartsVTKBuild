@@ -72,6 +72,7 @@ OPTION(PLUS_USE_OvrvisionPro "Provide support for the OvrvisionPro Stereo Camera
 OPTION(PLUS_USE_tesseract "Provide support for screen reading virtual device." OFF)
 OPTION(PLUS_USE_PHILIPS_3D_ULTRASOUND "Provide support for the Philips ie33 3D ultrasound probe" OFF)
 OPTION(PLUS_USE_NVIDIA_DVP "Provide support for the NVidia Digital Video Pipeline" OFF)
+OPTION(PLUS_USE_RTSP "Provide support for RTSP streaming video" OFF)
 IF(PLUS_USE_NVIDIA_DVP)
   FIND_PACKAGE(QuadroSDI REQUIRED)
   FIND_PACKAGE(OpenGL REQUIRED)
@@ -92,8 +93,8 @@ IF(RobartsVTK_USE_QT)
 
   SET(QT_VERSION_MAJOR ${Qt5_VERSION_MAJOR})
 
-  SET(RobartsVTKLib_DEPENDENCIES ${RobartsVTKLib_DEPENDENCIES} Qt5::Widgets)
-  SET(RobartsVTKLib_PROJECT_ARGS ${RobartsVTKLib_PROJECT_ARGS} -DQt5_DIR:PATH=${Qt5_DIR})
+  LIST(APPEND RobartsVTKLib_DEPENDENCIES Qt5::Widgets)
+  LIST(APPEND RobartsVTKLib_PROJECT_ARGS -DQt5_DIR:PATH=${Qt5_DIR})
 ENDIF()
 
 #-----------------------------------------------------------------------------
@@ -119,7 +120,6 @@ ENDIF()
 MARK_AS_ADVANCED(ADDITIONAL_CXX_FLAGS)
 
 SET(ep_common_args)
-
 IF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio")
   SET(ep_common_args
     ${ep_common_args}
@@ -137,14 +137,14 @@ SET(ep_dependency_DIR ${CMAKE_BINARY_DIR}/Deps)
 #-----------------------------------------------------------------------------
 INCLUDE(Superbuild/External_VTK.cmake)
 
-IF( VTK_DIR )
-  SET(RobartsVTKLib_PROJECT_ARGS ${RobartsVTKLib_PROJECT_ARGS} -DVTK_DIR:PATH=${VTK_DIR})
+IF(VTK_DIR)
+  LIST(APPEND RobartsVTKLib_PROJECT_ARGS -DVTK_DIR:PATH=${VTK_DIR})
 ELSE()
-  IF( RobartsVTK_USE_PLUS )
-    SET(Plus_DEPENDENCIES ${Plus_DEPENDENCIES} vtk)
+  IF(RobartsVTK_USE_PLUS)
+    LIST(APPEND Plus_DEPENDENCIES vtk)
   ENDIF()
-  SET(RobartsVTKLib_DEPENDENCIES ${RobartsVTKLib_DEPENDENCIES} vtk)
-  SET(RobartsVTKLib_PROJECT_ARGS ${RobartsVTKLib_PROJECT_ARGS} -DVTK_DIR:PATH=${RobartsVTK_VTK_DIR})
+  LIST(APPEND RobartsVTKLib_DEPENDENCIES vtk)
+  LIST(APPEND RobartsVTKLib_PROJECT_ARGS -DVTK_DIR:PATH=${RobartsVTK_VTK_DIR})
 ENDIF()
 
 #-----------------------------------------------------------------------------
@@ -152,16 +152,16 @@ ENDIF()
 #-----------------------------------------------------------------------------
 IF(RobartsVTK_USE_ITK)
   INCLUDE(Superbuild/External_ITK.cmake)
-  
-  IF( ITK_DIR )
-    SET(RobartsVTKLib_PROJECT_ARGS ${RobartsVTKLib_PROJECT_ARGS} -DITK_DIR:PATH=${ITK_DIR})
+
+  IF(ITK_DIR)
+    LIST(APPEND RobartsVTKLib_PROJECT_ARGS -DITK_DIR:PATH=${ITK_DIR})
   ELSE()
-    IF( RobartsVTK_USE_PLUS )
-      SET(Plus_DEPENDENCIES ${Plus_DEPENDENCIES} itk)
+    IF(RobartsVTK_USE_PLUS)
+      LIST(APPEND Plus_DEPENDENCIES itk)
     ENDIF()
 
-    SET(RobartsVTKLib_PROJECT_ARGS ${RobartsVTKLib_PROJECT_ARGS} -DITK_DIR:PATH=${RobartsVTK_ITK_DIR})
-    SET(RobartsVTKLib_DEPENDENCIES ${RobartsVTKLib_DEPENDENCIES} itk)
+    LIST(APPEND RobartsVTKLib_PROJECT_ARGS -DITK_DIR:PATH=${RobartsVTK_ITK_DIR})
+    LIST(APPEND RobartsVTKLib_DEPENDENCIES itk)
   ENDIF()
 ENDIF()
 
@@ -170,23 +170,23 @@ ENDIF()
 #-----------------------------------------------------------------------------
 IF(RobartsVTK_BUILD_APPS)
   INCLUDE(Superbuild/External_OpenCV.cmake)
-  
-  IF( OpenCV_DIR )
-    SET(RobartsVTKLib_PROJECT_ARGS ${RobartsVTKLib_PROJECT_ARGS} -DOpenCV_DIR:PATH=${OpenCV_DIR})
+
+  IF(OpenCV_DIR)
+    LIST(APPEND RobartsVTKLib_PROJECT_ARGS -DOpenCV_DIR:PATH=${OpenCV_DIR})
   ELSE()
-    SET(RobartsVTKLib_PROJECT_ARGS ${RobartsVTKLib_PROJECT_ARGS} -DOpenCV_DIR:PATH=${RobartsVTK_OpenCV_DIR})
+    LIST(APPEND RobartsVTKLib_PROJECT_ARGS -DOpenCV_DIR:PATH=${RobartsVTK_OpenCV_DIR})
   ENDIF()
 
-  SET(RobartsVTKLib_DEPENDENCIES ${RobartsVTKLib_DEPENDENCIES} OpenCV)
-  
+  LIST(APPEND RobartsVTKLib_DEPENDENCIES OpenCV)
+
   IF(RobartsVTK_USE_PLUS)
-    SET(Plus_DEPENDENCIES ${Plus_DEPENDENCIES} OpenCV)
-    IF( OpenCV_DIR )
+    LIST(APPEND Plus_DEPENDENCIES OpenCV)
+    IF(OpenCV_DIR)
       SET(OpenCV_Dependency_Arg -DOpenCV_DIR:PATH=${OpenCV_DIR})
     ELSE()
       SET(OpenCV_Dependency_Arg -DOpenCV_DIR:PATH=${RobartsVTK_OpenCV_DIR})
     ENDIF()
-    
+
     IF(CUDA_FOUND)
       LIST(APPEND OpenCV_Dependency_Arg -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR})
     ENDIF()
@@ -202,37 +202,37 @@ IF(RobartsVTK_USE_PLUS)
   SET(RobartsVTK_PlusLib_BIN_DIR ${PLUS_BIN_DIR}/PlusLib-bin)
   SET(RobartsVTK_PlusApp_BIN_DIR ${PLUS_BIN_DIR}/PlusApp-bin)
 
-  SET(RobartsVTKLib_PROJECT_ARGS ${RobartsVTKLib_PROJECT_ARGS} -DPlusLib_DIR:PATH=${RobartsVTK_PlusLib_BIN_DIR})
-  SET(RobartsVTKLib_PROJECT_ARGS ${RobartsVTKLib_PROJECT_ARGS} -DPlusApp_DIR:PATH=${RobartsVTK_PlusApp_BIN_DIR})
+  LIST(APPEND RobartsVTKLib_PROJECT_ARGS -DPlusLib_DIR:PATH=${RobartsVTK_PlusLib_BIN_DIR})
+  LIST(APPEND RobartsVTKLib_PROJECT_ARGS -DPlusApp_DIR:PATH=${RobartsVTK_PlusApp_BIN_DIR})
 
   IF(PlusLib_DIR)
-    SET(RobartsVTKLib_DEPENDENCIES ${RobartsVTKLib_DEPENDENCIES} PlusLib)
+    LIST(APPEND RobartsVTKLib_DEPENDENCIES PlusLib)
   ELSE()
-    SET(RobartsVTKLib_DEPENDENCIES ${RobartsVTKLib_DEPENDENCIES} Plus)
+    LIST(APPEND RobartsVTKLib_DEPENDENCIES Plus)
   ENDIF()
   
-  IF( PlusApp_DIR )
-    SET(RobartsVTKLib_DEPENDENCIES ${RobartsVTKLib_DEPENDENCIES} PlusApp)
+  IF(PlusApp_DIR)
+    LIST(APPEND RobartsVTKLib_DEPENDENCIES PlusApp)
   ELSE()
-    SET(RobartsVTKLib_DEPENDENCIES ${RobartsVTKLib_DEPENDENCIES} Plus)
+    LIST(APPEND RobartsVTKLib_DEPENDENCIES Plus)
   ENDIF()
 ENDIF()
 
 IF(RobartsVTK_USE_CUDA)
   IF("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
-    set(_generations "Fermi" "Kepler" "Maxwell" "Pascal")
+    SET(_generations "Fermi" "Kepler" "Maxwell" "Pascal")
     FIND_PACKAGE(CUDA 7.0 REQUIRED)
   ELSE()
     # Cuda support for 32bit ended with 6.5
-    set(_generations "Fermi" "Kepler" "Maxwell")
+    SET(_generations "Fermi" "Kepler" "Maxwell")
     FIND_PACKAGE(CUDA 6.5 REQUIRED EXACT)
   ENDIF()
 
   # Allow the user to define the CUDA build architectures
-  set(CUDA_GENERATION "" CACHE STRING "Build CUDA device code only for specific GPU architecture. Leave empty to build for all architectures.")
-  set_property( CACHE CUDA_GENERATION PROPERTY STRINGS "" ${_generations} )
+  SET(CUDA_GENERATION "" CACHE STRING "Build CUDA device code only for specific GPU architecture. Leave empty to build for all architectures.")
+  set_property(CACHE CUDA_GENERATION PROPERTY STRINGS "" ${_generations})
 
-  SET(RobartsVTKLib_PROJECT_ARGS ${RobartsVTKLib_PROJECT_ARGS} -DCUDA_GENERATION:STRING=${CUDA_GENERATION} -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR})
+  LIST(APPEND RobartsVTKLib_PROJECT_ARGS -DCUDA_GENERATION:STRING=${CUDA_GENERATION} -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR})
 ENDIF()
 
 IF(RobartsVTK_USE_VISUALIZATION)
@@ -252,14 +252,14 @@ IF(RobartsVTK_USE_VISUALIZATION)
     SET(ZLIB_ROOT ${RobartsVTK_zlib_DIR}/install)
   ENDIF()
   SET(libpng_DEPENDENCIES zlib)
-  
+
   INCLUDE(Superbuild/External_PNG.cmake)
   INCLUDE(Superbuild/External_FFTW.cmake)
-  
+
   LIST(APPEND RobartsVTKLib_DEPENDENCIES FFTW libpng zlib)
-  
+
   SET(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${RobartsVTK_PNG_DIR}/install)
-  SET(RobartsVTKLib_PROJECT_ARGS ${RobartsVTKLib_PROJECT_ARGS} -DZLIB_ROOT:PATH=${ZLIB_ROOT} -DFFTW_ROOT_DIR:PATH=${RobartsVTK_FFTW_DIR} -DPNG_CMAKE_FILE:FILEPATH=${RobartsVTK_PNG_DIR}/install/lib/libpng/libpng16.cmake)
+  LIST(APPEND RobartsVTKLib_PROJECT_ARGS -DZLIB_ROOT:PATH=${ZLIB_ROOT} -DFFTW_ROOT_DIR:PATH=${RobartsVTK_FFTW_DIR} -DPNG_CMAKE_FILE:FILEPATH=${RobartsVTK_PNG_DIR}/install/lib/libpng/libpng16.cmake)
 ENDIF()
 
 IF(RobartsVTK_USE_OpenCL)
