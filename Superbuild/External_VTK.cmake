@@ -1,7 +1,11 @@
 IF(VTK_DIR)
   # VTK has been built already
-  FIND_PACKAGE(VTK 7 REQUIRED NO_MODULE PATHS ${VTK_DIR} NO_DEFAULT_PATH)
-  
+  FIND_PACKAGE(VTK NO_MODULE)
+
+  IF(NOT ${VTK_VERSION_MAJOR} GREATER 6)
+    MESSAGE(FATAL_ERROR "RobartsVTK requires VTK7 or newer.")
+  ENDIF()
+
   IF( ${VTK_RENDERING_BACKEND} STREQUAL "OpenGL" )
     MESSAGE(FATAL_ERROR "RobartsVTK requires OpenGL2 backend enabled in VTK build. The VTK at ${VTK_DIR} does not have this enabled.")
     SET(VTK_DIR "VTK_DIR-NOTFOUND")
