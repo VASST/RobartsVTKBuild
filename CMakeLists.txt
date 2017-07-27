@@ -137,10 +137,10 @@ SET(ep_dependency_DIR ${CMAKE_BINARY_DIR}/Deps)
 #-----------------------------------------------------------------------------
 INCLUDE(Superbuild/External_VTK.cmake)
 
-IF( VTK_DIR )
+IF(VTK_DIR)
   SET(RobartsVTKLib_PROJECT_ARGS ${RobartsVTKLib_PROJECT_ARGS} -DVTK_DIR:PATH=${VTK_DIR})
 ELSE()
-  IF( RobartsVTK_USE_PLUS )
+  IF(RobartsVTK_USE_PLUS)
     SET(Plus_DEPENDENCIES ${Plus_DEPENDENCIES} vtk)
   ENDIF()
   SET(RobartsVTKLib_DEPENDENCIES ${RobartsVTKLib_DEPENDENCIES} vtk)
@@ -153,10 +153,10 @@ ENDIF()
 IF(RobartsVTK_USE_ITK)
   INCLUDE(Superbuild/External_ITK.cmake)
   
-  IF( ITK_DIR )
+  IF(ITK_DIR)
     SET(RobartsVTKLib_PROJECT_ARGS ${RobartsVTKLib_PROJECT_ARGS} -DITK_DIR:PATH=${ITK_DIR})
   ELSE()
-    IF( RobartsVTK_USE_PLUS )
+    IF(RobartsVTK_USE_PLUS)
       SET(Plus_DEPENDENCIES ${Plus_DEPENDENCIES} itk)
     ENDIF()
 
@@ -171,7 +171,7 @@ ENDIF()
 IF(RobartsVTK_BUILD_APPS)
   INCLUDE(Superbuild/External_OpenCV.cmake)
   
-  IF( OpenCV_DIR )
+  IF(OpenCV_DIR)
     SET(RobartsVTKLib_PROJECT_ARGS ${RobartsVTKLib_PROJECT_ARGS} -DOpenCV_DIR:PATH=${OpenCV_DIR})
   ELSE()
     SET(RobartsVTKLib_PROJECT_ARGS ${RobartsVTKLib_PROJECT_ARGS} -DOpenCV_DIR:PATH=${RobartsVTK_OpenCV_DIR})
@@ -181,7 +181,7 @@ IF(RobartsVTK_BUILD_APPS)
   
   IF(RobartsVTK_USE_PLUS)
     SET(Plus_DEPENDENCIES ${Plus_DEPENDENCIES} OpenCV)
-    IF( OpenCV_DIR )
+    IF(OpenCV_DIR)
       SET(OpenCV_Dependency_Arg -DOpenCV_DIR:PATH=${OpenCV_DIR})
     ELSE()
       SET(OpenCV_Dependency_Arg -DOpenCV_DIR:PATH=${RobartsVTK_OpenCV_DIR})
@@ -211,7 +211,7 @@ IF(RobartsVTK_USE_PLUS)
     SET(RobartsVTKLib_DEPENDENCIES ${RobartsVTKLib_DEPENDENCIES} Plus)
   ENDIF()
   
-  IF( PlusApp_DIR )
+  IF(PlusApp_DIR)
     SET(RobartsVTKLib_DEPENDENCIES ${RobartsVTKLib_DEPENDENCIES} PlusApp)
   ELSE()
     SET(RobartsVTKLib_DEPENDENCIES ${RobartsVTKLib_DEPENDENCIES} Plus)
@@ -220,17 +220,17 @@ ENDIF()
 
 IF(RobartsVTK_USE_CUDA)
   IF("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
-    set(_generations "Fermi" "Kepler" "Maxwell" "Pascal")
+    SET(_generations "Fermi" "Kepler" "Maxwell" "Pascal")
     FIND_PACKAGE(CUDA 7.0 REQUIRED)
   ELSE()
     # Cuda support for 32bit ended with 6.5
-    set(_generations "Fermi" "Kepler" "Maxwell")
+    SET(_generations "Fermi" "Kepler" "Maxwell")
     FIND_PACKAGE(CUDA 6.5 REQUIRED EXACT)
   ENDIF()
 
   # Allow the user to define the CUDA build architectures
-  set(CUDA_GENERATION "" CACHE STRING "Build CUDA device code only for specific GPU architecture. Leave empty to build for all architectures.")
-  set_property( CACHE CUDA_GENERATION PROPERTY STRINGS "" ${_generations} )
+  SET(CUDA_GENERATION "" CACHE STRING "Build CUDA device code only for specific GPU architecture. Leave empty to build for all architectures.")
+  set_property( CACHE CUDA_GENERATION PROPERTY STRINGS "" ${_generations})
 
   SET(RobartsVTKLib_PROJECT_ARGS ${RobartsVTKLib_PROJECT_ARGS} -DCUDA_GENERATION:STRING=${CUDA_GENERATION} -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR})
 ENDIF()
@@ -298,6 +298,9 @@ ExternalProject_Add( RobartsVTKLib
     -DRobartsVTK_USE_CUDA_ANALYTICS:BOOL=${RobartsVTK_USE_CUDA_ANALYTICS} 
     -DRobartsVTK_BUILD_APPS:BOOL=${RobartsVTK_BUILD_APPS} 
     -DRobartsVTK_Data_DIR:PATH=${RobartsVTK_Data_DIR}
+    -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:PATH=${CMAKE_BINARY_DIR}/bin
+    -DCMAKE_LIBRARY_OUTPUT_DIRECTORY:PATH=${CMAKE_BINARY_DIR}/bin
+    -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY:PATH=${CMAKE_BINARY_DIR}/lib
     -DBUILD_SHARED_LIBS:BOOL=${BUILD_SHARED_LIBS} 
     -DBUILD_TESTING:BOOL=${BUILD_TESTING} 
     -DBUILD_DOCUMENTATION:BOOL=${BUILD_DOCUMENTATION} 

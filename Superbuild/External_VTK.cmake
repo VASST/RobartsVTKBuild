@@ -13,11 +13,18 @@ IF(VTK_DIR)
   SET(RobartsVTK_VTK_DIR ${VTK_DIR})
 ELSE()
   # VTK has not been built yet, so download and build it as an external project
-  SET(VTK_GIT_REPOSITORY "gitlab.kitware.com/vtk/vtk.git")
-  SET(VTK_GIT_TAG "v7.1.0")
-  SET(VTK_GIT_PROTOCOL "https")
+  SET(VTK_GIT_REPOSITORY "https://gitlab.kitware.com/vtk/vtk.git")
+  
+  SET(RobartsVTK_VTK_VERSION "7" CACHE STRING "Build VTK version")
+  set_property(CACHE RobartsVTK_VTK_VERSION PROPERTY STRINGS 7 8)
 
-  MESSAGE(STATUS "Downloading and building VTK from: ${VTK_GIT_PROTOCOL}://${VTK_GIT_REPOSITORY}")
+  IF(${RobartsVTK_VTK_VERSION} STREQUAL "7")
+    SET(VTK_GIT_TAG "v7.1.0")
+  ELSE()
+    SET(VTK_GIT_TAG "v8.0.0")
+  ENDIF()
+
+  MESSAGE(STATUS "Downloading and building VTK ${VTK_GIT_TAG} from: ${VTK_GIT_REPOSITORY}")
 
   IF( RobartsVTK_USE_QT )
     LIST(APPEND VTK_VERSION_SPECIFIC_ARGS
@@ -25,11 +32,6 @@ ELSE()
       -DQt5_DIR:PATH=${Qt5_DIR}
       )
   ENDIF()
-
-  LIST(APPEND VTK_VERSION_SPECIFIC_ARGS
-    -DLIBRARY_OUTPUT_PATH:STRING=${RobartsVTK_EXECUTABLE_OUTPUT_PATH}
-    -DEXECUTABLE_OUTPUT_PATH:STRING=${RobartsVTK_EXECUTABLE_OUTPUT_PATH}
-    )
 
   IF(APPLE)
     LIST(APPEND VTK_VERSION_SPECIFIC_ARGS
@@ -46,7 +48,7 @@ ELSE()
     SOURCE_DIR "${RobartsVTK_VTK_SRC_DIR}"
     BINARY_DIR "${RobartsVTK_VTK_DIR}"
     #--Download step--------------
-    GIT_REPOSITORY "${VTK_GIT_PROTOCOL}://${VTK_GIT_REPOSITORY}"
+    GIT_REPOSITORY ${VTK_GIT_REPOSITORY}
     GIT_TAG ${VTK_GIT_TAG}
     #--Configure step-------------
     CMAKE_ARGS 
@@ -56,6 +58,9 @@ ELSE()
         -DBUILD_TESTING:BOOL=OFF 
         -DBUILD_EXAMPLES:BOOL=OFF
         -DCMAKE_CXX_MP_FLAG:BOOL=ON
+        -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:PATH=${CMAKE_BINARY_DIR}/bin
+        -DCMAKE_LIBRARY_OUTPUT_DIRECTORY:PATH=${CMAKE_BINARY_DIR}/bin
+        -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY:PATH=${CMAKE_BINARY_DIR}/lib
         -DVTK_RENDERING_BACKEND:STRING=OpenGL2
         -DCMAKE_CXX_FLAGS:STRING=${ep_common_cxx_flags}
         -DVTK_QT_VERSION:STRING=${QT_VERSION_MAJOR}

@@ -7,12 +7,12 @@ IF(ITK_DIR)
   MESSAGE(STATUS "Using ITK available at: ${ITK_DIR}")
   
   SET(RobartsVTK_ITK_DIR ${ITK_DIR})
-ELSE(ITK_DIR)
+ELSE()
   # ITK has not been built yet, so download and build it as an external project
   SET (ITKv4_REPOSITORY ${GIT_PROTOCOL}://itk.org/ITK.git)
   SET (ITKv4_GIT_TAG v4.10.0)
   
-  MESSAGE(STATUS "Downloading and building ITK from: ${GIT_PROTOCOL}://itk.org/ITK.git")
+  MESSAGE(STATUS "Downloading and building ITK ${ITKv4_GIT_TAG} from: ${GIT_PROTOCOL}://itk.org/ITK.git")
 
   SET (RobartsVTK_ITK_SRC_DIR "${ep_dependency_DIR}/itk")
   SET (RobartsVTK_ITK_DIR "${ep_dependency_DIR}/itk-bin" CACHE INTERNAL "Path to store itk binaries")
@@ -26,7 +26,9 @@ ELSE(ITK_DIR)
     #--Configure step-------------
     CMAKE_ARGS 
       ${ep_common_args}
-      -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:STRING=${RobartsVTK_EXECUTABLE_OUTPUT_PATH}
+      -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:PATH=${CMAKE_BINARY_DIR}/bin
+      -DCMAKE_LIBRARY_OUTPUT_DIRECTORY:PATH=${CMAKE_BINARY_DIR}/bin
+      -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY:PATH=${CMAKE_BINARY_DIR}/lib
       -DBUILD_SHARED_LIBS:BOOL=ON
       -DBUILD_TESTING:BOOL=OFF
       -DBUILD_EXAMPLES:BOOL=OFF
@@ -44,4 +46,4 @@ ELSE(ITK_DIR)
     DEPENDS ${ITK_DEPENDENCIES}
     )
 
-ENDIF(ITK_DIR)
+ENDIF()

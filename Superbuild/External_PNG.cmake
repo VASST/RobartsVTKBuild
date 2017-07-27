@@ -5,7 +5,7 @@ IF(PNG_DIR)
   MESSAGE(STATUS "Using libpng available at: ${PNG_DIR}")
   
   SET(RobartsVTK_PNG_DIR ${PNG_DIR})
-ELSE(PNG_DIR)
+ELSE()
   # libpng has not been built yet, so download and build it as an external project
 
   SET(libpng_GIT_REPOSITORY "github.com/glennrp/libpng.git")
@@ -30,4 +30,4 @@ ELSE(PNG_DIR)
     DEPENDS ${libpng_DEPENDENCIES}
     )
 
-ENDIF(PNG_DIR)
+ENDIF()

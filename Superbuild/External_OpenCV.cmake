@@ -10,7 +10,7 @@ ELSE()
   SET(EXTRA_OPENCV_ARGS)
   FIND_PACKAGE(CUDA QUIET)
 
-  IF( NOT CUDA_FOUND )
+  IF(NOT CUDA_FOUND)
     LIST(APPEND EXTRA_OPENCV_ARGS -DWITH_CUDA:BOOL=OFF)
   ELSE()
     LIST(APPEND EXTRA_OPENCV_ARGS 
@@ -45,7 +45,7 @@ ELSE()
     STRING(REPLACE "-std=c++11" "" opencv_common_cxx_flags ${opencv_common_cxx_flags})
   ENDIF()
 
-  SET (RobartsVTK_OpenCV_SRC_DIR ${ep_dependency_DIR}/OpenCV CACHE INTERNAL "Path to store OpenCV contents.")
+  SET (RobartsVTK_OpenCV_SRC_DIR ${ep_dependency_DIR}/OpenCV CACHE INTERNAL "Path to store OpenCV source.")
   SET (RobartsVTK_OpenCV_DIR ${ep_dependency_DIR}/OpenCV-bin CACHE INTERNAL "Path to store OpenCV contents.")
   ExternalProject_Add(OpenCV
     PREFIX "${ep_dependency_DIR}/OpenCV-prefix"
@@ -62,6 +62,9 @@ ELSE()
       -DBUILD_SHARED_LIBS:BOOL=ON
       -DBUILD_TESTS:BOOL=OFF
       -DBUILD_PERF_TESTS:BOOL=OFF
+      -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:PATH=${CMAKE_BINARY_DIR}/bin
+      -DCMAKE_LIBRARY_OUTPUT_DIRECTORY:PATH=${CMAKE_BINARY_DIR}/bin
+      -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY:PATH=${CMAKE_BINARY_DIR}/lib
       -DBUILD_DOCS:BOOL=OFF
       -DVTK_DIR:PATH=${RobartsVTK_VTK_DIR} 
       -DWITH_OPENGL:BOOL=ON
