@@ -254,12 +254,14 @@ IF(RobartsVTK_USE_VISUALIZATION)
   SET(libpng_DEPENDENCIES zlib)
 
   INCLUDE(Superbuild/External_PNG.cmake)
-  INCLUDE(Superbuild/External_FFTW.cmake)
 
-  LIST(APPEND RobartsVTKLib_DEPENDENCIES FFTW libpng zlib)
+  LIST(APPEND RobartsVTKLib_DEPENDENCIES libpng zlib)
 
   SET(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${RobartsVTK_PNG_DIR}/install)
-  LIST(APPEND RobartsVTKLib_PROJECT_ARGS -DZLIB_ROOT:PATH=${ZLIB_ROOT} -DFFTW_ROOT_DIR:PATH=${RobartsVTK_FFTW_DIR} -DPNG_CMAKE_FILE:FILEPATH=${RobartsVTK_PNG_DIR}/install/lib/libpng/libpng16.cmake)
+  LIST(APPEND RobartsVTKLib_PROJECT_ARGS 
+    -DZLIB_ROOT:PATH=${ZLIB_ROOT} 
+    -DPNG_CMAKE_FILE:FILEPATH=${RobartsVTK_PNG_DIR}/install/lib/libpng/libpng16.cmake
+    )
 ENDIF()
 
 IF(RobartsVTK_USE_OpenCL)
