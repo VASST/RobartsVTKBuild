@@ -26,6 +26,9 @@ ELSE(zlib_DIR)
     CMAKE_ARGS 
         ${ep_common_args}
         -DCMAKE_INSTALL_PREFIX:PATH=${RobartsVTK_zlib_DIR}/install
+        -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:PATH=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        -DCMAKE_LIBRARY_OUTPUT_DIRECTORY:PATH=${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
+        -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY:PATH=${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}        
     #--Build step-----------------
     #--Install step-----------------
     DEPENDS ${zlib_DEPENDENCIES}
