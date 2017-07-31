@@ -10,8 +10,8 @@ IF(ITK_DIR)
 ELSE()
   # ITK has not been built yet, so download and build it as an external project
   SET (ITKv4_REPOSITORY ${GIT_PROTOCOL}://itk.org/ITK.git)
-  SET (ITKv4_GIT_TAG v4.10.0)
-  
+  SET (ITKv4_GIT_TAG v4.12.0)
+
   MESSAGE(STATUS "Downloading and building ITK ${ITKv4_GIT_TAG} from: ${GIT_PROTOCOL}://itk.org/ITK.git")
 
   SET (RobartsVTK_ITK_SRC_DIR "${ep_dependency_DIR}/itk")
