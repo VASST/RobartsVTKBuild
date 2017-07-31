@@ -72,7 +72,7 @@ OPTION(PLUS_USE_OvrvisionPro "Provide support for the OvrvisionPro Stereo Camera
 OPTION(PLUS_USE_tesseract "Provide support for screen reading virtual device." OFF)
 OPTION(PLUS_USE_PHILIPS_3D_ULTRASOUND "Provide support for the Philips ie33 3D ultrasound probe" OFF)
 OPTION(PLUS_USE_NVIDIA_DVP "Provide support for the NVidia Digital Video Pipeline" OFF)
-OPTION(PLUS_USE_RTSP_VIDEO "Provide support for RTSP streaming video" OFF)
+OPTION(PLUS_USE_OpenCV_VIDEO "Provide support for OpenCV capture devices" OFF)
 IF(PLUS_USE_NVIDIA_DVP)
   FIND_PACKAGE(QuadroSDI REQUIRED)
   FIND_PACKAGE(OpenGL REQUIRED)

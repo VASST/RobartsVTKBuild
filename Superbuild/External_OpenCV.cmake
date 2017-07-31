@@ -1,5 +1,5 @@
 IF(OpenCV_DIR)
-  FIND_PACKAGE(OpenCV 3.1.0 REQUIRED NO_MODULE PATHS ${OpenCV_DIR})
+  FIND_PACKAGE(OpenCV 3.2.0 REQUIRED NO_MODULE PATHS ${OpenCV_DIR})
 
   MESSAGE(STATUS "Using OpenCV available at: ${OpenCV_DIR}")
   
@@ -39,12 +39,6 @@ ELSE()
     SET(ep_common_cxx_flags "${ep_common_cxx_flags} /D_VARIADIC_MAX=10")
   ENDIF()
 
-  SET(opencv_common_cxx_flags ${ep_common_cxx_flags})
-  IF(UNIX AND NOT APPLE)
-    # Remove c++11 for opencv 3.1.0 on linux as it causes build issues
-    STRING(REPLACE "-std=c++11" "" opencv_common_cxx_flags ${opencv_common_cxx_flags})
-  ENDIF()
-
   SET (RobartsVTK_OpenCV_SRC_DIR ${ep_dependency_DIR}/OpenCV CACHE INTERNAL "Path to store OpenCV source.")
   SET (RobartsVTK_OpenCV_DIR ${ep_dependency_DIR}/OpenCV-bin CACHE INTERNAL "Path to store OpenCV contents.")
   ExternalProject_Add(OpenCV
@@ -53,15 +47,16 @@ ELSE()
     BINARY_DIR "${RobartsVTK_OpenCV_DIR}"
     #--Download step--------------
     GIT_REPOSITORY https://github.com/opencv/opencv.git
-    GIT_TAG 8842b9b2b2abfaafe52ca4a8f019a3cb35217641
+    GIT_TAG 3.2.0
     #--Configure step-------------
     CMAKE_ARGS 
       ${ep_common_args}
       -DCMAKE_C_FLAGS=${ep_common_c_flags}
-      -DCMAKE_CXX_FLAGS=${opencv_common_cxx_flags}
+      -DCMAKE_CXX_FLAGS=${ep_common_cxx_flags}
       -DBUILD_SHARED_LIBS:BOOL=ON
       -DBUILD_TESTS:BOOL=OFF
       -DBUILD_PERF_TESTS:BOOL=OFF
+      -DEXECUTABLE_OUTPUT_PATH:PATH=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
       -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:PATH=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
       -DCMAKE_LIBRARY_OUTPUT_DIRECTORY:PATH=${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
       -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY:PATH=${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}
