@@ -13,22 +13,28 @@ IF(VTK_DIR)
   ENDIF()
 
   MESSAGE(STATUS "Using VTK available at: ${VTK_DIR}")
-  
+
   SET(RobartsVTK_VTK_DIR ${VTK_DIR})
 ELSE()
   # VTK has not been built yet, so download and build it as an external project
   SET(VTK_GIT_REPOSITORY "https://gitlab.kitware.com/vtk/vtk.git")
-  
+
   SET(RobartsVTK_VTK_VERSION "7" CACHE STRING "Build VTK version")
   set_property(CACHE RobartsVTK_VTK_VERSION PROPERTY STRINGS 7 8)
 
   IF(${RobartsVTK_VTK_VERSION} STREQUAL "7")
     SET(VTK_GIT_TAG "v7.1.0")
   ELSE()
-    SET(VTK_GIT_TAG "v8.0.0")
+    SET(VTK_GIT_TAG "v8.1.0")
   ENDIF()
 
   MESSAGE(STATUS "Downloading and building VTK ${VTK_GIT_TAG} from: ${VTK_GIT_REPOSITORY}")
+
+  IF( NOT APPLE )
+    LIST(APPEND VTK_VERSION_SPECIFIC_ARGS
+      -DVTK_SMP_IMPLEMENTATION_TYPE:STRING=OpenMP
+      )
+  ENDIF()
 
   IF( RobartsVTK_USE_QT )
     LIST(APPEND VTK_VERSION_SPECIFIC_ARGS
@@ -55,11 +61,11 @@ ELSE()
     GIT_REPOSITORY ${VTK_GIT_REPOSITORY}
     GIT_TAG ${VTK_GIT_TAG}
     #--Configure step-------------
-    CMAKE_ARGS 
+    CMAKE_ARGS
         ${ep_common_args}
         ${VTK_VERSION_SPECIFIC_ARGS}
-        -DBUILD_SHARED_LIBS:BOOL=ON 
-        -DBUILD_TESTING:BOOL=OFF 
+        -DBUILD_SHARED_LIBS:BOOL=ON
+        -DBUILD_TESTING:BOOL=OFF
         -DBUILD_EXAMPLES:BOOL=OFF
         -DCMAKE_CXX_MP_FLAG:BOOL=ON
         -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:PATH=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
@@ -70,7 +76,6 @@ ELSE()
         -DVTK_QT_VERSION:STRING=${QT_VERSION_MAJOR}
         -DCMAKE_C_FLAGS:STRING=${ep_common_c_flags}
         -DVTK_WRAP_PYTHON:BOOL=OFF
-        -DVTK_SMP_IMPLEMENTATION_TYPE:STRING=OpenMP
         -DCMAKE_PREFIX_PATH:STRING=${CMAKE_PREFIX_PATH}
     #--Build step-----------------
     #--Install step-----------------
