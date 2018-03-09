@@ -19,17 +19,17 @@ SET(RobartsVTKLib_DEPENDENCIES)
 #-----------------------------------------------------------------------------
 # Set up our directory structure for output libraries and binaries
 IF(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
-  SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+  SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "bin")
 ENDIF()
 IF(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
-  IF(UNIX)
-    SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
-  ELSE()
-    SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
-  ENDIF()
+  SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "lib")
 ENDIF()
 IF(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
-  SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
+  IF(UNIX)
+    SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "share")
+  ELSE()
+    SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "lib")
+  ENDIF()
 ENDIF()
 MARK_AS_ADVANCED(CMAKE_RUNTIME_OUTPUT_DIRECTORY
   CMAKE_LIBRARY_OUTPUT_DIRECTORY
@@ -96,10 +96,6 @@ OPTION(PLUS_USE_PHILIPS_3D_ULTRASOUND "Provide support for the Philips ie33 3D u
 OPTION(PLUS_USE_NVIDIA_DVP "Provide support for the NVidia Digital Video Pipeline" OFF)
 OPTION(PLUS_USE_OPTICAL_MARKER_TRACKER "Provide support for optical marker tracker devices" OFF)
 OPTION(PLUS_USE_OpenCV_VIDEO "Provide support for OpenCV capture devices" OFF)
-IF(PLUS_USE_NVIDIA_DVP)
-  FIND_PACKAGE(QuadroSDI REQUIRED)
-  FIND_PACKAGE(OpenGL REQUIRED)
-ENDIF()
 
 #-----------------------------------------------------------------------------
 # Preparatory setup
@@ -243,12 +239,16 @@ ENDIF()
 
 IF(RobartsVTK_USE_CUDA)
   IF("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
-    SET(_generations "Fermi" "Kepler" "Maxwell" "Pascal")
-    FIND_PACKAGE(CUDA 7.0 REQUIRED)
+    SET(_generations "Fermi" "Kepler" "Maxwell" "Pascal" "Volta")
+    FIND_PACKAGE(CUDA REQUIRED)
   ELSE()
     # Cuda support for 32bit ended with 6.5
     SET(_generations "Fermi" "Kepler" "Maxwell")
-    FIND_PACKAGE(CUDA 6.5 REQUIRED EXACT)
+    FIND_PACKAGE(CUDA 6.5 QUIET)
+    IF(CUDA_VERSION VERSION_GREATER 6.5)
+      MESSAGE(FATAL_ERROR "CUDA version > 6.5 no longer include support for 32 bit builds. Cannot use CUDA.")
+      SET(RobartsVTK_USE_CUDA OFF FORCE)
+    ENDIF()
   ENDIF()
 
   # Allow the user to define the CUDA build architectures
