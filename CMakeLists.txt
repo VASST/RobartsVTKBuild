@@ -149,7 +149,7 @@ ENDIF()
 SET(ep_common_c_flags "${CMAKE_C_FLAGS} ${ADDITIONAL_C_FLAGS}")
 SET(ep_common_cxx_flags "${CMAKE_CXX_FLAGS} ${ADDITIONAL_CXX_FLAGS}")
 
-SET(ep_dependency_DIR ${CMAKE_BINARY_DIR}/Deps)
+SET(ep_dependency_DIR ${CMAKE_BINARY_DIR})
 
 #-----------------------------------------------------------------------------
 # VTK

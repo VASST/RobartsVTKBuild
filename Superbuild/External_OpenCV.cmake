@@ -47,7 +47,7 @@ ELSE()
     BINARY_DIR "${RobartsVTK_OpenCV_DIR}"
     #--Download step--------------
     GIT_REPOSITORY https://github.com/opencv/opencv.git
-    GIT_TAG 8edc2e5aaffa8c349ff9184ae77b3cccdea7cf6e
+    GIT_TAG 2244f1722c3aea4e83e9fbbe44f78ec961df26e5
     #--Configure step-------------
     CMAKE_ARGS
       ${ep_common_args}

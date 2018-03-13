@@ -2,8 +2,8 @@ IF(VTK_DIR)
   # VTK has been built already
   FIND_PACKAGE(VTK NO_MODULE)
 
-  IF(NOT ${VTK_VERSION_MAJOR} GREATER 6)
-    MESSAGE(FATAL_ERROR "RobartsVTK requires VTK7 or newer.")
+  IF(NOT ${VTK_VERSION_MAJOR} GREATER 7)
+    MESSAGE(FATAL_ERROR "RobartsVTK requires VTK8 or newer.")
   ENDIF()
 
   IF( ${VTK_RENDERING_BACKEND} STREQUAL "OpenGL" )
@@ -18,15 +18,7 @@ IF(VTK_DIR)
 ELSE()
   # VTK has not been built yet, so download and build it as an external project
   SET(VTK_GIT_REPOSITORY "https://gitlab.kitware.com/vtk/vtk.git")
-
-  SET(RobartsVTK_VTK_VERSION "7" CACHE STRING "Build VTK version")
-  set_property(CACHE RobartsVTK_VTK_VERSION PROPERTY STRINGS 7 8)
-
-  IF(${RobartsVTK_VTK_VERSION} STREQUAL "7")
-    SET(VTK_GIT_TAG "v7.1.0")
-  ELSE()
-    SET(VTK_GIT_TAG "v8.1.0")
-  ENDIF()
+  SET(VTK_GIT_TAG "d5bbb9e99bbc6d11d2196c48bfd8f33508554551")
 
   MESSAGE(STATUS "Downloading and building VTK ${VTK_GIT_TAG} from: ${VTK_GIT_REPOSITORY}")
 
