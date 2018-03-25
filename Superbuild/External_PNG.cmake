@@ -20,7 +20,7 @@ ELSE()
     SOURCE_DIR "${RobartsVTK_PNG_SRC_DIR}"
     BINARY_DIR "${RobartsVTK_PNG_DIR}"
     #--Download step--------------
-    GIT_REPOSITORY "${GIT_PROTOCOL}://${libpng_GIT_REPOSITORY}"
+    GIT_REPOSITORY ${GIT_PROTOCOL}://${libpng_GIT_REPOSITORY}
     GIT_TAG ${libpng_GIT_TAG}
     #--Configure step-------------
     CMAKE_ARGS 

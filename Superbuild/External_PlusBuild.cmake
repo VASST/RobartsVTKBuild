@@ -22,7 +22,7 @@ ELSE()
     SOURCE_DIR "${PLUS_SRC_DIR}"
     BINARY_DIR "${PLUS_BIN_DIR}"
     #--Download step--------------
-    GIT_REPOSITORY https://github.com/PlusToolkit/PlusBuild.git
+    GIT_REPOSITORY ${GIT_PROTOCOL}://github.com/PlusToolkit/PlusBuild.git
     GIT_TAG "master"
     #--Configure step-------------
     CMAKE_ARGS 

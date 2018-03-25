@@ -6,7 +6,7 @@ ExternalProject_Add(RobartsVTKData
   PREFIX "${CMAKE_BINARY_DIR}/RVTKData-prefix"
   SOURCE_DIR "${RobartsVTK_Data_DIR}" 
   #--Download step--------------
-  GIT_REPOSITORY https://github.com/VASST/RobartsVTKData.git
+  GIT_REPOSITORY ${GIT_PROTOCOL}://github.com/VASST/RobartsVTKData.git
   GIT_TAG master
   #--Configure step-------------
   CONFIGURE_COMMAND ""

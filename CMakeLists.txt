@@ -102,7 +102,13 @@ OPTION(PLUS_USE_OpenCV_VIDEO "Provide support for OpenCV capture devices" OFF)
 #-----------------------------------------------------------------------------
 SET(Plus_DEPENDENCIES)
 INCLUDE(ExternalProject)
-SET(GIT_PROTOCOL git)
+
+OPTION(RobartsVTK_USE_GIT_PROTOCOL "If behind a firewall turn this off to use https instead." OFF)
+
+SET(GIT_PROTOCOL "git")
+IF(NOT RobartsVTK_USE_GIT_PROTOCOL)
+  SET(GIT_PROTOCOL "https")
+ENDIF()
 
 #-----------------------------------------------------------------------------
 # Qt comes first so we know which version to pass to VTK

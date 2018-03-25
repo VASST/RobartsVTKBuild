@@ -8,7 +8,7 @@ IF(zlib_DIR)
 ELSE(zlib_DIR)
   # zlib has not been built yet, so download and build it as an external project
 
-  SET(zlib_GIT_REPOSITORY "github.com/madler/zlib.git")
+  SET(zlib_GIT_REPOSITORY "${GIT_PROTOCOL}://github.com/madler/zlib.git")
   SET(zlib_GIT_TAG "v1.2.8")
 
   MESSAGE(STATUS "Downloading and building zlib from: ${GIT_PROTOCOL}://${zlib_GIT_REPOSITORY}")
@@ -20,7 +20,7 @@ ELSE(zlib_DIR)
     SOURCE_DIR "${RobartsVTK_zlib_SRC_DIR}"
     BINARY_DIR "${RobartsVTK_zlib_DIR}"
     #--Download step--------------
-    GIT_REPOSITORY "${GIT_PROTOCOL}://${zlib_GIT_REPOSITORY}"
+    GIT_REPOSITORY ${zlib_GIT_REPOSITORY}
     GIT_TAG ${zlib_GIT_TAG}
     #--Configure step-------------
     CMAKE_ARGS 
