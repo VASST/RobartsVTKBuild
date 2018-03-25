@@ -34,7 +34,7 @@ ELSE()
   ENDIF()
 
   IF( UNIX AND NOT APPLE )
-    LIST(APPEND EXTRA_OPENCV_ARGS -DCUDA_NVCC_FLAGS:STRING="-std=c++11 --expt-relaxed-constexpr")
+    LIST(APPEND EXTRA_OPENCV_ARGS -DCUDA_NVCC_FLAGS:STRING=-std=c++11::--expt-relaxed-constexpr)
   ENDIF()
 
   LIST(APPEND EXTRA_OPENCV_ARGS -DBUILD_opencv_python2:BOOL=OFF)
@@ -53,6 +53,7 @@ ELSE()
     GIT_REPOSITORY ${GIT_PROTOCOL}://github.com/opencv/opencv.git
     GIT_TAG 2244f1722c3aea4e83e9fbbe44f78ec961df26e5
     #--Configure step-------------
+    LIST_SEPARATOR ::
     CMAKE_ARGS
       ${ep_common_args}
       -DCMAKE_C_FLAGS=${ep_common_c_flags}
